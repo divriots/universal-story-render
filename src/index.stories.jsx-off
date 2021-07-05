@@ -1,0 +1,37 @@
+import { render as renderStory } from "./render";
+import ReactDom from "react-dom";
+import React from "react";
+import * as Vue from 'vue@next';
+import { html } from '@microsoft/fast-element';
+
+function require(dep) {
+  switch (dep) {
+    case "react-dom":
+      return ReactDom;
+    case "vue":
+      return Vue;
+  }
+}
+const div = document.createElement("div");
+document.body.appendChild(div);
+
+export const Render = () => 
+    renderStory(require, <div>It works React!</div>, "React", div);
+
+
+export const FastRender = () =>
+  renderStory(require, html`<h1>Hello FAST</h1>`, "ViewTemplate", div);
+
+const app = Vue.createApp({});
+
+export const VueA = () => renderStory(require, {
+  app,
+  components: { },
+  template: '<h1>Hello A</h1>'
+}, "Vue", div);
+
+export const VueB = () => renderStory(require, {
+  app,
+  components: { },
+  template: '<h1>Hello B</h1>'
+}, "Vue", div);

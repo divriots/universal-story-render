@@ -1,0 +1,26 @@
+import { typeOf } from "./typeOf";
+import React from "react";
+import * as Preact from "preact";
+import chai from "chai/chai.js";
+const { expect } = chai;
+
+import { html } from '@microsoft/fast-element';
+
+describe("typeOf", () => {
+  it("should detect react element", () => {
+    expect(typeOf(React.createElement("div"))).to.equal("React");
+  });
+  it("should detect preact element", () => {
+    expect(typeOf(Preact.createElement("div"))).to.equal("Preact");
+  });
+  it("should detect DOM element", () => {
+    expect(typeOf(document.createElement("div"))).to.equal("Element");
+  });
+  it("should detect DocumentFragment", () => {
+    expect(typeOf(new DocumentFragment())).to.equal("DocumentFragment");
+  });
+  it("should detect FAST", () => {
+    expect(typeOf(html`<h1>Hello fast</h1>`)).to.equal("ViewTemplate");
+  });
+  
+});

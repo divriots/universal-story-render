@@ -5,11 +5,5 @@
   "license": "ISC",
   "type": "module",
   "homepage": "{{ homepage }}",
-  "scripts": {
-    "serve": "cso-cli serve SX8bfi6VKU5FdIMUa8jK --open"
-  },
-  "devDependencies": {
-    "cso-cli": "latest"
-  },
   "dependencies": {}
 }

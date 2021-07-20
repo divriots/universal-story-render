@@ -1,5 +1,3 @@
-let currentVueApp = undefined;
-
 export async function render(
   require: (dep: string) => any,
   storyResult: any,
@@ -108,12 +106,7 @@ export async function render(
       const Vue = await require("vue");
       const app = storyResult.app || Vue.createApp({});
 
-      // setup vue
-      if (currentVueApp !== app) {
-        currentVueApp?.unmount(div);
-        app.mount(div);
-        currentVueApp = app;
-      }
+      app.mount(div);
 
       // render story
       div.innerHTML = '';

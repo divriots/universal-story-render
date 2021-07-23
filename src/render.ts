@@ -1,5 +1,3 @@
-let currentVueApp = undefined;
-
 export async function render(
   require: (dep: string) => any,
   storyResult: any,
@@ -106,21 +104,10 @@ export async function render(
     }
     case "Vue": {
       const Vue = await require("vue");
-      const app = storyResult.app || Vue.createApp({});
-
-      // setup vue
-      if (currentVueApp !== app) {
-        currentVueApp?.unmount(div);
-        app.mount(div);
-        currentVueApp = app;
-      }
-
-      // render story
-      div.innerHTML = '';
-      let vNode = storyResult.__v_isVNode ? storyResult : Vue.createVNode(storyResult);
-      if (app?._context) vNode.appContext = app._context;
-      Vue.render(vNode, div);
-
+      const app = Vue.createApp({
+        setup: () => () => Vue.h(storyResult)
+      });
+      app.mount(div);
       return true;
     }
     case "Element":

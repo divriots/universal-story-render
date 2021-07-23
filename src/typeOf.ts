@@ -8,9 +8,6 @@ export function typeOf(obj: any): string {
     if (String(obj.$$typeof) === "Symbol(react.element)") {
       return "React";
     }
-    if (obj.__v_isVNode) {
-      return 'Vue';
-    }
     if (obj.$flags$ !== undefined) {
       return "Stencil";
     }
@@ -38,7 +35,7 @@ export function typeOf(obj: any): string {
     if ("Component" in obj && typeOf(obj.Component) === "Svelte") {
       return "SvelteStory";
     }
-    if ("components" in obj && ("template" in obj || "render" in obj)) {
+    if ("__v_isVNode" in obj || "__scopeId" in obj || ("components" in obj && ("template" in obj || "render" in obj))) {
       return "Vue";
     }
     return obj.constructor.name;

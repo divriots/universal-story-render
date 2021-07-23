@@ -117,7 +117,7 @@ export async function render(
 
       // render story
       div.innerHTML = '';
-      let vNode = Vue.createVNode(storyResult);
+      let vNode = storyResult.__v_isVNode ? storyResult : Vue.createVNode(storyResult);
       if (app?._context) vNode.appContext = app._context;
       Vue.render(vNode, div);
 

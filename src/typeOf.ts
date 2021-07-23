@@ -8,6 +8,9 @@ export function typeOf(obj: any): string {
     if (String(obj.$$typeof) === "Symbol(react.element)") {
       return "React";
     }
+    if (obj.__v_isVNode) {
+      return 'Vue';
+    }
     if (obj.$flags$ !== undefined) {
       return "Stencil";
     }

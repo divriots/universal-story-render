@@ -104,10 +104,17 @@ export async function render(
     }
     case "Vue": {
       const Vue = await require("vue");
-      const app = Vue.createApp({
-        setup: () => () => Vue.h(storyResult)
-      });
-      app.mount(div);
+      const app = storyResult.app;
+      if (!app) {
+        const _app = Vue.createApp({
+          setup: () => () => Vue.h(storyResult),
+        });
+        _app.mount(div);
+      } else {
+        const vNode = Vue.h(storyResult);
+        vNode.appContext = app._context;
+        Vue.render(vNode, div);
+      }
       return true;
     }
     case "Element":

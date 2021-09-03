@@ -60,7 +60,7 @@ export function typeOf(obj: any): string {
     if ("CustomElementConstructor" in obj) {
       return "Lwc";
     }
-    if (fnStr.includes("extends SvelteComponent")) {
+    if (fnStr.includes("extends SvelteComponent") || fnStr.includes("extends ProxyComponent")) {
       return "Svelte";
     }
     if (

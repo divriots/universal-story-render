@@ -3,7 +3,7 @@ export async function render(
   storyResult: any,
   storyType: string,
   div: HTMLElement
-): Promise<boolean> {
+): Promise<boolean | Function> {
   switch (storyType) {
     case "Lwc": {
       div.appendChild(
@@ -68,7 +68,9 @@ export async function render(
     }
     case "React": {
       (await require("react-dom")).render(storyResult, div);
-      return true;
+      return async () => {
+        (await require("react-dom")).unmountComponentAtNode(div);
+      };
     }
     case "Preact": {
       (await require("preact")).render(storyResult, div);
@@ -105,8 +107,9 @@ export async function render(
     case "Vue": {
       const Vue = await require("vue");
       const app = storyResult.app;
+      let _app: any;
       if (!app) {
-        const _app = Vue.createApp({
+        _app = Vue.createApp({
           setup: () => () => Vue.h(storyResult),
         });
         _app.mount(div);
@@ -115,7 +118,14 @@ export async function render(
         vNode.appContext = app._context;
         Vue.render(vNode, div);
       }
-      return true;
+      return () => {
+        if(!app) {
+          _app.unmount();
+        }
+        else {
+          app.unmount();
+        }
+      };
     }
     case "Element":
     case "DocumentFragment": {

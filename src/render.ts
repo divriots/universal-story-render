@@ -3,7 +3,7 @@ export async function render(
   storyResult: any,
   storyType: string,
   div: HTMLElement
-): Promise<boolean | Function> {
+): Promise<boolean | VoidFunction> {
   switch (storyType) {
     case "Lwc": {
       div.appendChild(
@@ -69,7 +69,7 @@ export async function render(
     case "React": {
       const reactDom = (await require("react-dom"));
       reactDom.render(storyResult, div);
-      return async () => {
+      return () => {
         reactDom.unmountComponentAtNode(div);
       };
     }

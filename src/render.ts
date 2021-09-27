@@ -67,9 +67,10 @@ export async function render(
       return true;
     }
     case "React": {
-      (await require("react-dom")).render(storyResult, div);
+      const reactDom = (await require("react-dom"));
+      reactDom.render(storyResult, div);
       return async () => {
-        (await require("react-dom")).unmountComponentAtNode(div);
+          reactDom.unmountComponentAtNode(div);
       };
     }
     case "Preact": {

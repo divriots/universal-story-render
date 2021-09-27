@@ -70,7 +70,7 @@ export async function render(
       const reactDom = (await require("react-dom"));
       reactDom.render(storyResult, div);
       return async () => {
-          reactDom.unmountComponentAtNode(div);
+        reactDom.unmountComponentAtNode(div);
       };
     }
     case "Preact": {
@@ -97,13 +97,13 @@ export async function render(
       return true;
     }
     case "Svelte": {
-      new storyResult({ target: div });
-      return true;
+      const app = new storyResult({ target: div });
+      return () => app.$destroy();
     }
     case "SvelteStory": {
       const { Component, ...rest } = storyResult;
-      new Component({ target: div, ...rest });
-      return true;
+      const app = new Component({ target: div, ...rest });
+      return () => app.$destroy();
     }
     case "Vue": {
       const Vue = await require("vue");

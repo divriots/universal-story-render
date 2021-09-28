@@ -3,7 +3,7 @@ export async function render(
   storyResult: any,
   storyType: string,
   div: HTMLElement
-): Promise<boolean> {
+): Promise<boolean | VoidFunction> {
   switch (storyType) {
     case "Lwc": {
       div.appendChild(
@@ -67,8 +67,11 @@ export async function render(
       return true;
     }
     case "React": {
-      (await require("react-dom")).render(storyResult, div);
-      return true;
+      const reactDom = (await require("react-dom"));
+      reactDom.render(storyResult, div);
+      return () => {
+        reactDom.unmountComponentAtNode(div);
+      };
     }
     case "Preact": {
       (await require("preact")).render(storyResult, div);
@@ -94,19 +97,20 @@ export async function render(
       return true;
     }
     case "Svelte": {
-      new storyResult({ target: div });
-      return true;
+      const app = new storyResult({ target: div });
+      return () => app.$destroy();
     }
     case "SvelteStory": {
       const { Component, ...rest } = storyResult;
-      new Component({ target: div, ...rest });
-      return true;
+      const app = new Component({ target: div, ...rest });
+      return () => app.$destroy();
     }
     case "Vue": {
       const Vue = await require("vue");
       const app = storyResult.app;
+      let _app: any;
       if (!app) {
-        const _app = Vue.createApp({
+        _app = Vue.createApp({
           setup: () => () => Vue.h(storyResult),
         });
         _app.mount(div);
@@ -115,7 +119,14 @@ export async function render(
         vNode.appContext = app._context;
         Vue.render(vNode, div);
       }
-      return true;
+      return () => {
+        if(!app) {
+          _app.unmount();
+        }
+        else {
+          app.unmount();
+        }
+      };
     }
     case "Element":
     case "DocumentFragment": {

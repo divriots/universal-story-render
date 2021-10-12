@@ -38,6 +38,14 @@ export function typeOf(obj: any): string {
     if ("__v_isVNode" in obj || "__scopeId" in obj || ("components" in obj && ("template" in obj || "render" in obj))) {
       return "Vue";
     }
+    if (
+      obj.component &&
+      obj.component.__annotations__ &&
+      obj.component.__annotations__[0] &&
+      obj.component.__annotations__[0].ngMetadataName === "Component"
+    ) {
+      return "Angular";
+    }
     return obj.constructor.name;
   } else if (type === "Array") {
     let hasOmi = false;

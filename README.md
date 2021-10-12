@@ -42,3 +42,4 @@ render(() => ReactDOM, <div />, "React", div);
 | DOM              | `Element`               | none                            |
 | DocumentFragment | `DocumentFragment`      | none                            |
 | Iterable         | `Iterable`              | none                            |
+| Angular          | `Angular`               | `tslib`, `@angular/platform-browser-dynamic`, `@angular/core`, `@angular/platform-browser` |

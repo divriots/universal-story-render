@@ -135,31 +135,28 @@ export async function render(
     }
     case "Angular": {
       const { props, component: StoryComponent, markup } = storyResult;
-      const { __decorate } = (await require("tslib"));
       const { platformBrowserDynamic } = (await require("@angular/platform-browser-dynamic"));
       const { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA, destroyPlatform } = (await require("@angular/core"));
       const { BrowserModule } = (await require("@angular/platform-browser"));
 
       // Create a wrapper component to host the bindings
-      let AppComponent = class AppComponent {};
-      Object.keys(props).map(prop => AppComponent.prototype[prop] = props[prop]);
-      AppComponent = __decorate([
-        Component({
-          selector: 'app-root',
-          template: markup,
-        })
-      ], AppComponent);
+      @Component({
+        selector: 'app-root',
+        template: markup,
+      })
+      class AppComponent {};
+      Object.keys(props).map((prop: string): string => AppComponent.prototype[prop] = props[prop]);
 
-      //
-      let AppModule = class AppModule {};
-      AppModule = __decorate([
-        NgModule({
-          imports: [BrowserModule],
-          declarations: [AppComponent, StoryComponent],
-          bootstrap: [AppComponent],
-          schemas: [CUSTOM_ELEMENTS_SCHEMA],
-        }),
-      ], AppModule);
+      // Create the default module
+      @NgModule({
+        imports: [BrowserModule],
+        declarations: [AppComponent, StoryComponent],
+        bootstrap: [AppComponent],
+        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      })
+      class AppModule {};
+
+      // Init the app
       div.insertAdjacentHTML('beforeend', '<app-root></app-root>');
       platformBrowserDynamic().bootstrapModule(AppModule);
       return () => destroyPlatform();

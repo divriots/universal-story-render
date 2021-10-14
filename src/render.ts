@@ -136,8 +136,15 @@ export async function render(
     case "Angular": {
       const { props, component: StoryComponent, markup } = storyResult;
       const { platformBrowserDynamic } = (await require("@angular/platform-browser-dynamic"));
-      const { Component, NgModule, CUSTOM_ELEMENTS_SCHEMA, destroyPlatform } = (await require("@angular/core"));
+      const { Component, NgModule, destroyPlatform } = (await require("@angular/core"));
       const { BrowserModule } = (await require("@angular/platform-browser"));
+      const {
+        imports = [],
+        declarations = [],
+        bootstrap = [],
+        providers = [],
+        schemas = [],
+      } = storyResult;
 
       // Create a wrapper component to host the bindings
       @Component({
@@ -149,10 +156,11 @@ export async function render(
 
       // Create the default module
       @NgModule({
-        imports: [BrowserModule],
-        declarations: [AppComponent, StoryComponent],
-        bootstrap: [AppComponent],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
+        imports: [BrowserModule, ...imports],
+        declarations: [AppComponent, StoryComponent, ...declarations],
+        bootstrap: [AppComponent, ...bootstrap],
+        schemas,
+        providers,
       })
       class AppModule {};
 

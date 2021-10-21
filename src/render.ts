@@ -144,7 +144,7 @@ export async function render(
         bootstrap = [],
         providers = [],
         schemas = [],
-      } = storyResult;
+      } = storyResult.moduleMetadata;
 
       // Create a wrapper component to host the bindings
       @Component({

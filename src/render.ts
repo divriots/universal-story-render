@@ -148,7 +148,7 @@ export async function render(
 
       // Create a wrapper component to host the bindings
       @Component({
-        selector: 'app-root',
+        selector: div,
         template: markup,
       })
       class AppComponent {};
@@ -165,7 +165,6 @@ export async function render(
       class AppModule {};
 
       // Init the app
-      div.insertAdjacentHTML('beforeend', '<app-root></app-root>');
       platformBrowserDynamic().bootstrapModule(AppModule);
       return () => destroyPlatform();
     }

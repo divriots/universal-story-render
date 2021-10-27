@@ -134,7 +134,7 @@ export async function render(
       return true;
     }
     case "Angular": {
-      const { props, component: StoryComponent, markup } = storyResult;
+      const { props, component: StoryComponent, template } = storyResult;
       const { platformBrowserDynamic } = (await require("@angular/platform-browser-dynamic"));
       const { Component, NgModule, destroyPlatform } = (await require("@angular/core"));
       const { BrowserModule } = (await require("@angular/platform-browser"));
@@ -149,7 +149,7 @@ export async function render(
       // Create a wrapper component to host the bindings
       @Component({
         selector: div,
-        template: markup,
+        template,
       })
       class AppComponent {};
       Object.keys(props).map((prop: string): string => AppComponent.prototype[prop] = props[prop]);

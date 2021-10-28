@@ -134,9 +134,9 @@ export async function render(
       return true;
     }
     case "Angular": {
-      const { props, component: StoryComponent, template } = storyResult;
+      const { props, component: StoryComponent } = storyResult;
       const { platformBrowserDynamic } = (await require("@angular/platform-browser-dynamic"));
-      const { Component, NgModule, destroyPlatform } = (await require("@angular/core"));
+      const { Component, NgModule, destroyPlatform, ComponentFactoryResolver, ViewChild, ViewContainerRef} = (await require("@angular/core"));
       const { BrowserModule } = (await require("@angular/platform-browser"));
       const {
         imports = [],
@@ -149,16 +149,37 @@ export async function render(
       // Create a wrapper component to host the bindings
       @Component({
         selector: div,
-        template,
+        template: '<ng-container #container></ng-container>',
       })
-      class AppComponent {};
-      Object.keys(props).map((prop: string): string => AppComponent.prototype[prop] = props[prop]);
+      class AppComponent {
+        @ViewChild('container', { read: ViewContainerRef }) vc: ViewContainerRef;
+
+        constructor(private resolver: ComponentFactoryResolver) {}
+
+        ngAfterViewInit() {
+          const componentFactory = this.resolver.resolveComponentFactory(StoryComponent);
+          const componentRef = this.container.createComponent(componentFactory);
+
+          // Pass props to the component
+          const propsMetadata = StoryComponent.__prop__metadata__;
+
+          Object.keys(props).map((prop) => {
+            const isOutput = propsMetadata[prop] && propsMetadata[prop][0].ngMetadataName === 'Output';
+            if (isOutput) {
+              componentRef.instance[prop].subscribe(props[prop]);
+            } else {
+              componentRef.instance[prop] = props[prop]
+            }
+          });
+        }
+      };
 
       // Create the default module
       @NgModule({
         imports: [BrowserModule, ...imports],
         declarations: [AppComponent, StoryComponent, ...declarations],
         bootstrap: [AppComponent, ...bootstrap],
+        entryComponents: [StoryComponent],
         schemas,
         providers,
       })

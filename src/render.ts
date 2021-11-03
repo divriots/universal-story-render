@@ -139,12 +139,14 @@ export async function render(
       const { Component, NgModule, destroyPlatform, ComponentFactoryResolver, ViewChild, ViewContainerRef} = (await require("@angular/core"));
       const { BrowserModule } = (await require("@angular/platform-browser"));
       const {
-        imports = [],
-        declarations = [],
-        bootstrap = [],
-        providers = [],
-        schemas = [],
-      } = storyResult.moduleMetadata;
+        moduleMetadata: {
+          imports = [],
+          declarations = [],
+          bootstrap = [],
+          providers = [],
+          schemas = [],
+        } = {}
+      } = storyResult;
 
       // Create a wrapper component to host the bindings
       @Component({

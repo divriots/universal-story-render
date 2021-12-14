@@ -5,6 +5,14 @@ export async function render(
   div: HTMLElement
 ): Promise<boolean | VoidFunction> {
   switch (storyType) {
+    case "RenderFn": {
+      storyResult(div);
+      return true;
+    }
+    case "RenderProp": {
+      storyResult.render(div);
+      return true;
+    }
     case "Lwc": {
       div.appendChild(
         (await require("lwc")).createElement("c-story", { is: storyResult })

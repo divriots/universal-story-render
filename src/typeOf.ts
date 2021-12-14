@@ -2,6 +2,9 @@ export function typeOf(obj: any): string {
   const type = Object.prototype.toString.call(obj).slice(8, -1);
   
   if (type === "Object") {
+    if (obj._$story_type$ !== undefined) {
+      return obj._$story_type$
+    }
     if (typeof obj[Symbol.iterator] === "function") {
       return "Iterable";
     }
@@ -64,6 +67,9 @@ export function typeOf(obj: any): string {
     }
     if (hasOmi) return "Omi";
   } else if (type === "Function") {
+    if (obj._$story_type$ !== undefined) {
+      return obj._$story_type$
+    }
     const fnStr = obj.toString();
     if ("CustomElementConstructor" in obj) {
       return "Lwc";

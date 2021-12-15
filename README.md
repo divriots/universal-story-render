@@ -39,7 +39,38 @@ render(() => ReactDOM, <div />, "React", div);
 | Svelte           | `Svelte`\|`SvelteStory` | none                            |
 | Vue              | `Vue`                   | `vue`                           |
 | Solid            | `Solid`                 | `solid-js/dom`                  |
+| Fast             | `ViewTemplate`          | none                            |
+| Lit              | `TemplateResult`        | `lit-html`                      |
+| LWC              | `Lwc`                   | `lwc`                           |
+| uhtml            | `Hole`                  | `uhtml`                         |
+| lighterhtml      | `LighterHole`           | `lighterhtml`                   |
 | DOM              | `Element`               | none                            |
 | DocumentFragment | `DocumentFragment`      | none                            |
 | Iterable         | `Iterable`              | none                            |
 | Angular          | `Angular`               | `@angular/platform-browser-dynamic`, `@angular/core`, `@angular/platform-browser` |
+
+## Explicit type
+
+If the passed object/function has a String property `_$story_type$`, its value will be used as type (no guessing)
+
+## Custom renderers
+
+On top of framework renderers, this library also support 2 custom renderers (which can be used with above `_$story_type$` property):
+
+### `RenderProp`
+```
+const obj = {
+  render(div) {
+    // ...
+  }
+}
+render(null, obj, "RenderProp", div);
+```
+
+### `RenderFn`
+```
+const obj = function render(div) {
+  // ...
+}
+render(null, obj, "RenderFn", div);
+```

@@ -101,7 +101,7 @@ export async function render(
       return true;
     }
     case "Solid": {
-      (await require("solid-js/dom")).render(storyResult, div);
+      (await require("solid-js/web")).render(storyResult, div);
       return true;
     }
     case "Svelte": {

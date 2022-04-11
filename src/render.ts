@@ -115,7 +115,7 @@ export async function render(
     }
     case "Vue": {
       const Vue = await require("vue");
-      const app = storyResult.app;
+      const app = storyResult.app || (div as any).__vue_app__;
       let _app: any;
       if (!app) {
         _app = Vue.createApp({

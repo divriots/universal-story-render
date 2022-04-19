@@ -26,8 +26,8 @@ export async function render(
     }
     case "ViewTemplate": {
       // FAST
-      storyResult.render({}, div);
-      return true;
+      const view = storyResult.render({}, div);
+      return () => view.dispose();
     }
     case "Hole": {
       // uhtml

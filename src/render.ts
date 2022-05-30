@@ -91,13 +91,13 @@ export async function render(
     }
     case "Riot": {
       const createComp = (await require("riot")).component(storyResult);
-      createComp(document.getElementById("root"), {});
+      createComp(div, {});
       return true;
     }
     case "RiotStory": {
       const { Component, props, options } = storyResult;
       const createComp = (await require("riot")).component(Component);
-      createComp(document.getElementById("root"), props, options);
+      createComp(div, props, options);
       return true;
     }
     case "Solid": {
